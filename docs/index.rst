@@ -1,0 +1,5 @@
+====================
+mingtak.allpay
+====================
+
+User documentation
