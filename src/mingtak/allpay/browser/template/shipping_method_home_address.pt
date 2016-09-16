@@ -1,0 +1,23 @@
+<div xmlns:tal="http://xml.zope.org/namespaces/tal"
+     xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+     i18n:domain="mingtak.allpay"
+     class="LogisticsType">
+
+
+<tal:switch switch="view/request/form/value">
+  <tal:case case="string:address1">
+    <metal:macro use-macro="context/@@i8d_macro/macros/address" />
+  </tal:case>
+
+  <tal:case case="string:address2">
+    <metal:macro use-macro="context/@@i8d_macro/macros/address" />
+  </tal:case>
+
+  <tal:case case="string:manually">
+    <metal:macro use-macro="context/@@i8d_macro/macros/address" />
+  </tal:case>
+
+</tal:switch>
+
+
+</div>

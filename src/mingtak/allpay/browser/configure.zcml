@@ -17,6 +17,113 @@
       directory="static"
       />
 
+  <!-- views -->
+  <browser:page
+      name="shipping_method"
+      for="*"
+      class=".views.ShippingMethod"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      name="shipping_method_home_address"
+      for="*"
+      class=".views.ShippingMethodHomeAddress"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      name="invoice_method"
+      for="*"
+      class=".views.InvoiceMethod"
+      template="template/invoice_method.pt"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      name="logistics_map"
+      for="*"
+      class=".logistics.LogisticsMap"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      name="logistics_express_create"
+      for="*"
+      class=".logistics.LogisticsExpressCreate"
+      permission="zope2.View"
+      />
+
+  <!-- 電子地圖選好回傳，對映ServerReplyURL -->
+  <browser:page
+      name="logistics_reply"
+      for="*"
+      class=".logistics.LogisticsReply"
+      permission="zope2.View"
+      />
+
+  <!-- 物流訂單回傳，對映ServerReplyURL -->
+  <browser:page
+      name="logistics_server_reply"
+      for="*"
+      class=".logistics.LogisticsServerReply"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      name="logistics_client_reply"
+      for="*"
+      class=".logistics.LogisticsClientReply"
+      permission="zope2.View"
+      />
+
+  /* return_url, payment_info_url, 用同樣的code */
+  <browser:page
+      name="return_url"
+      for="*"
+      class=".bill.ReturnUrl"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      name="payment_info_url"
+      for="*"
+      class=".bill.ReturnUrl"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      name="client_back_url"
+      for="*"
+      class=".bill.ClientBackUrl"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      name="checkout_confirm"
+      for="*"
+      class=".bill.CheckoutConfirm"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      name="checkout"
+      for="*"
+      class=".bill.Checkout"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      name="order_view"
+      for="mingtak.allpay.interfaces.IOrder"
+      class=".views.OrderView"
+      template="template/order_view.pt"
+      permission="zope2.View"
+      />
+
+
+
+
   <!-- configlet -->
   <browser:page
     name="allpaySettingControlPanel"
