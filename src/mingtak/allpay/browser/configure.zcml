@@ -17,4 +17,11 @@
       directory="static"
       />
 
+  <!-- configlet -->
+  <browser:page
+    name="allpaySettingControlPanel"
+    for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+    permission="cmf.ManagePortal"
+    class=".allpaySetting.AllpaySettingControlPanelView"
+  />
 </configure>

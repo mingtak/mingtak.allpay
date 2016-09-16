@@ -1,0 +1,3 @@
+<registry>
+  <records interface="mingtak.allpay.browser.allpaySetting.IAllpaySetting" />
+</registry>
