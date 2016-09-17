@@ -13,7 +13,7 @@ from plone import api
 from DateTime import DateTime
 import random
 import transaction
-
+import json
 import logging
 
 
@@ -119,27 +119,24 @@ class CheckoutConfirm(BrowserView):
             self.profile = portal['members'][currentId]
 
         self.itemInCart = request.cookies.get('itemInCart', '')
-        self.itemInCart_list = self.itemInCart.split()
-        self.brain = catalog({'UID':self.itemInCart_list})
+        self.itemInCart = json.loads(self.itemInCart)
+        self.brain = catalog({'UID':self.itemInCart.keys()})
 
         self.shippingFee = 0
         self.discount = 0
         self.totalAmount = 0
         for item in self.brain:
-            qty = int(request.cookies.get(item.UID, 1))
+            qty = self.itemInCart[item.UID]
             self.totalAmount += item.salePrice * qty
             self.shippingFee += item.standardShippingCost
-            self.discount += int(item.salePrice * item.maxUsedBonus) * int(request.cookies.get(item.UID, 1))
+            self.discount += (item.salePrice * item.maxUsedBonus * qty)
 
         if self.profile and self.discount > self.profile.bonus:
             self.discount = self.profile.bonus
 
-# 應付金額：totalAmount + shippingFee - specailDiscount(滿3000折520)
         self.payable = self.totalAmount
-#        if self.payable > 3000:
-#            self.payable -= 520
         self.payable += self.shippingFee
-
+        # 尚未減 discount , 放在 view 顯示
 
         return self.template()
 
