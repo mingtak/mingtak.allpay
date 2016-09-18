@@ -20,6 +20,9 @@
 <metal:row define-macro="home">
     <h4 i18n:translate="">Address</h4>
     <p i18n:translate="">You can fill below fields to select shipping to door.</p>
+
+<tal:ignore condition="False">
+<!-- 先忽略2組常用地址的設定，之後再加上去 -->
     <p tal:condition="not:context/@@user_is_anonymous">
       <select name="shipping_address" class="shipping_address">
         <option value="address1" label="Address 1" selected i18n:attributes="label" i18n:translate="">Address 1</option>
@@ -27,11 +30,12 @@
          <option value="manually" label="Manually" i18n:attributes="label" i18n:translate="">Manually</option>
       </select>
     </p>
+</tal:ignore>
 </metal:row>
 
 <metal:row define-macro="address">
 <div id="shipping_method_home_address">
-
+<!-- 先忽略常用地址選用，直接 case:default -->
 <tal:switch switch="python:view.request.form.get('value')">
 <tal:case case="string:address1">
         <select class="city selectcity" name="city" required tal:attributes="data-selected view/profile/addr_city | nothing" title="Please select a city" i18n:attributes="title"></select>
