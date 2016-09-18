@@ -3,11 +3,10 @@ from mingtak.allpay import _
 from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 #from zope.component import getMultiAdapter
-
 from z3c.relationfield.relation import RelationValue
 from zope.event import notify
-from zope.lifecycleevent import ObjectModifiedEvent
-
+from plone.protect.interfaces import IDisableCSRFProtection
+from zope.interface import alsoProvides
 from plone import api
 #from pyallpay import AllPay
 from DateTime import DateTime
@@ -15,6 +14,9 @@ import random
 import transaction
 import json
 import logging
+import hashlib
+import urllib
+from Products.CMFPlone.utils import safe_unicode
 
 
 class ReturnUrl(BrowserView):
@@ -150,12 +152,32 @@ class CheckoutConfirm(BrowserView):
 
         return self.template()
 
+# 會用到的先寫下來
+#from hashlib import sha256
+#from urllib import quote_plus
 
 class Checkout(BrowserView):
     """ Checkout
     """
-
+    prefixString = 'mingtak.allpay.browser.allpaySetting.IAllpaySetting'
     logger = logging.getLogger('bill.Checkout')
+
+    def getCheckMacValue(self, payment_info):
+        prefixString = self.prefixString
+
+        hashKey = api.portal.get_registry_record('%s.checkoutHashKey' % prefixString)
+        hashIv = api.portal.get_registry_record('%s.checkoutHashIV' % prefixString)
+
+        sortedString = ''
+        for k, v in sorted(payment_info.items()):
+            sortedString += '%s=%s&' % (k, str(v))
+
+        sortedString = 'HashKey=%s&%sHashIV=%s' % (str(hashKey), sortedString, str(hashIv))
+        sortedString = urllib.quote_plus(sortedString).lower()
+        checkMacValue = hashlib.sha256(sortedString).hexdigest()
+        checkMacValue = checkMacValue.upper()
+        return checkMacValue
+
 
     def __call__(self):
         context = self.context
@@ -163,9 +185,11 @@ class Checkout(BrowserView):
         response = request.response
         catalog = context.portal_catalog
         portal = api.portal.get()
+        alsoProvides(request, IDisableCSRFProtection)
+
+        prefixString = self.prefixString
         itemInCart = request.cookies.get('itemInCart', '')
         itemInCart = json.loads(itemInCart)
-
         # 檢查收件地址
         if request.form.get('LogisticsType') == 'home' and not request.form.get('address'):
             api.portal.show_message(message=_(u'Please fill full address information'), request=request, type='error')
@@ -228,12 +252,8 @@ class Checkout(BrowserView):
                 itemName += ', Special Discount: %s' % (specialDiscount)
                 itemDescription += ', Special Discount: %s' % (specialDiscount)
 
-        import pdb; pdb.set_trace()
-
-        merchantTradeNo = '%s_%s' % (DateTime().strftime('%Y%m%d%H%M%S'), random.randint(10000,99999))
-
+        merchantTradeNo = '%ss%s' % (DateTime().strftime('%Y%m%d%H%M%S'), random.randint(1000,9999))
         with api.env.adopt_roles(['Manager']):
-#            import pdb ;pdb.set_trace()
             order = api.content.create(
                 type='Order',
                 title=merchantTradeNo,
@@ -258,24 +278,41 @@ class Checkout(BrowserView):
             else:
                 api.content.transition(obj=order, transition='publish')
 
-            transaction.commit()
 
-        paymentInfoURL = api.portal.get_registry_record('i8d.content.browser.coverSetting.ICoverSetting.paymentInfoURL')
-        clientBackURL = api.portal.get_registry_record('i8d.content.browser.coverSetting.ICoverSetting.clientBackURL')
-        payment_info = {'TotalAmount': totalAmount,
-                        'ChoosePayment': 'ALL',
-                        'MerchantTradeNo': merchantTradeNo,
-                        'ItemName': itemName,
-                        'PaymentInfoURL': paymentInfoURL,
-                        'ClientBackURL': '%s?MerchantTradeNo=%s&LogisticsType=%s&LogisticsSubType=%s' %
-                            (clientBackURL, merchantTradeNo, request.form.get('LogisticsType', 'cvs'), request.form.get('LogisticsSubType', 'UNIMART')),  #可以使用 get 帶參數
+        paymentInfoURL = api.portal.get_registry_record('%s.paymentInfoURL' % prefixString)
+        clientBackURL = api.portal.get_registry_record('%s.clientBackURL' % prefixString)
+        payment_info = {
+            'MerchantTradeNo': merchantTradeNo,
+            'ItemName': itemName,
+            'TradeDesc': '%s, Total: $%s' % (itemDescription, totalAmount),
+            'TotalAmount': totalAmount,
+            'ChoosePayment': 'ALL',
+            'PaymentType': 'aio',
+            'EncryptType': 1,
+            'PaymentInfoURL': paymentInfoURL,
+            'ClientBackURL': '%s?MerchantTradeNo=%s&LogisticsType=%s&LogisticsSubType=%s' %
+                (clientBackURL, merchantTradeNo, request.form.get('LogisticsType', 'cvs'), request.form.get('LogisticsSubType', 'UNIMART')),  #可以使用 get 帶參數
+            'ReturnURL': api.portal.get_registry_record('%s.returnURL' % prefixString),
+            'MerchantTradeDate': DateTime().strftime('%Y/%m/%d %H:%M:%S'),
+            'MerchantID': api.portal.get_registry_record('%s.merchantID' % prefixString),
         }
-        # TODO: 不依賴 pyallpay, 下面的 ALLPay(payment_info)需改寫
-        # ap = AllPay(payment_info)
-        # check out, this will return a dictionary containing checkValue...etc.
-        dict_url = ap.check_out()
-        # generate the submit form html.
-        form_html = ap.gen_check_out_form(dict_url)
 
+        checkMacValue = self.getCheckMacValue(payment_info)
+        payment_info['CheckMacValue'] = checkMacValue
+        service_url = api.portal.get_registry_record('%s.aioCheckoutURL' % prefixString)
+        form_html = self.gen_checkout_form(payment_info, service_url, True)
         return form_html
 
+
+    def gen_checkout_form(self, payment_info, service_url, auto_send=True):
+
+        form_html = '<form id="allPay-Form" name="allPayForm" method="post" target="_self" action="%s" style="display: none;">' % service_url
+
+        for i, val in enumerate(payment_info):
+            print val, payment_info[val]
+            form_html = "".join((form_html, "<input type='hidden' name='%s' value='%s' />" % (safe_unicode(val), safe_unicode(payment_info[val]))))
+
+        form_html = "".join((form_html, '<input type="submit" class="large" id="payment-btn" value="BUY" /></form>'))
+        if auto_send:
+            form_html = "".join((form_html, "<script>document.allPayForm.submit();</script>"))
+        return form_html
