@@ -102,6 +102,16 @@ class CheckoutConfirm(BrowserView):
 
     logger = logging.getLogger('bill.Checkout')
     template = ViewPageTemplateFile("template/checkout_confirm.pt")
+    home_template = ViewPageTemplateFile("template/home_template.pt")
+    cvs_template = ViewPageTemplateFile("template/cvs_template.pt")
+
+    def get_home_template(self):
+        return self.home_template()
+
+
+    def get_cvs_template(self):
+        return self.cvs_template()
+
 
     def __call__(self):
         context = self.context
@@ -128,7 +138,7 @@ class CheckoutConfirm(BrowserView):
         for item in self.brain:
             qty = self.itemInCart[item.UID]
             self.totalAmount += item.salePrice * qty
-            self.shippingFee += item.standardShippingCost
+            self.shippingFee += item.standardShippingCost # 同品項只收一次運費(ex, item_1, qty=3, 運費也只收一筆)
             self.discount += (item.salePrice * item.maxUsedBonus * qty)
 
         if self.profile and self.discount > self.profile.bonus:
@@ -146,19 +156,17 @@ class Checkout(BrowserView):
     """
 
     logger = logging.getLogger('bill.Checkout')
-    template = ViewPageTemplateFile("template/checkout.pt")
 
     def __call__(self):
         context = self.context
         request = self.request
         response = request.response
         catalog = context.portal_catalog
-        itemInCart = request.cookies.get('itemInCart', '')
-        itemInCart_list = itemInCart.split()
-
         portal = api.portal.get()
+        itemInCart = request.cookies.get('itemInCart', '')
+        itemInCart = json.loads(itemInCart)
 
-
+        # 檢查收件地址
         if request.form.get('LogisticsType') == 'home' and not request.form.get('address'):
             api.portal.show_message(message=_(u'Please fill full address information'), request=request, type='error')
             response.redirect('%s/@@checkout_confirm' % portal.absolute_url())
@@ -170,45 +178,30 @@ class Checkout(BrowserView):
             currentId = api.user.get_current().getId()
             profile = portal['members'][currentId]
 
-        brain = catalog({'UID':itemInCart_list})
+        brain = catalog({'UID':itemInCart.keys()})
         totalAmount = 0
         itemName = ''
         itemDescription = ''
-        productUIDs = {}
+#        productUIDs = {}
         shippingFee = 0
         discount = 0
-        # specialDiscount , 滿3000折520
-        specialDiscount = 0
+        specialDiscount = 0 # 未來促銷活動可用
 
         for item in brain:
-            qty = int(request.cookies.get(item.UID, 1))
-            productUIDs[item.UID] = qty
+            qty = itemInCart.get(item.UID, 1)
             totalAmount += item.salePrice * qty
             itemName += '%s $%s X %s#' % (item.Title, item.salePrice, qty)
             itemDescription += '%s: $%s X %s || ' % (item.Title, item.salePrice, qty)
 
-            shippingFee += item.standardShippingCost
+#            shippingFee += item.standardShippingCost # 同品項只收一次運費(ex, item_1, qty=3, 運費也只收一筆)
+            shippingFee = 0 # 目前全館免運費
             if not api.user.is_anonymous():
                 discount += int(item.salePrice * item.maxUsedBonus) * int(request.cookies.get(item.UID, 1))
-
-        # 計算是否滿3000，是就折520 / 本活動已於8/24結束
-#        if totalAmount >= 3000:
-#            specialDiscount = 520
-
-        # 8/25 開始促銷 start
-        if totalAmount >= 5000:
-            itemName += ', 滿5000加贈皇家珍珠鈣(100顆)'
-            itemDescription += ', 滿3000加贈皇家珍珠鈣(100顆)'
-        elif totalAmount >= 3000:
-            itemName += ', 滿3000加贈皇家珍珠鈣(50顆)'
-            itemDescription += ', 滿3000加贈皇家珍珠鈣(50顆)'
-        # 8/25 開始促銷 end
-
 
         totalAmount += shippingFee
 
         if profile:
-            if request.form['usingbonus'] == 'n':
+            if request.form.get('usingbonus', 'n') == 'n':
                 discount = 0
             if discount > profile.bonus:
                 discount = profile.bonus
@@ -220,7 +213,6 @@ class Checkout(BrowserView):
             itemName += 'shipping Fee: %s, discount: %s' % (shippingFee, discount)
             itemDescription += 'shipping Fee: %s, discount: %s' % (shippingFee, discount)
 
-
             # Special Discount資訊
             if specialDiscount > 0:
                 itemName += ', Special Discount: %s' % (specialDiscount)
@@ -229,7 +221,6 @@ class Checkout(BrowserView):
             itemName += 'shipping Fee: %s' % (shippingFee)
             itemDescription += 'shipping Fee: %s' % (shippingFee)
 
-
             # 折抵 Special Discount
             totalAmount -= specialDiscount
             # Special Discount資訊
@@ -237,18 +228,17 @@ class Checkout(BrowserView):
                 itemName += ', Special Discount: %s' % (specialDiscount)
                 itemDescription += ', Special Discount: %s' % (specialDiscount)
 
+        import pdb; pdb.set_trace()
 
+        merchantTradeNo = '%s_%s' % (DateTime().strftime('%Y%m%d%H%M%S'), random.randint(10000,99999))
 
-        merchantTradeNo = '%s%s' % (DateTime().strftime('%Y%m%d%H%M%S'), random.randint(10000,99999))
-
-        portal = api.portal.get()
         with api.env.adopt_roles(['Manager']):
 #            import pdb ;pdb.set_trace()
             order = api.content.create(
                 type='Order',
                 title=merchantTradeNo,
                 description = '%s, Total: $%s' % (itemDescription, totalAmount),
-                productUIDs = productUIDs,
+                productUIDs = itemInCart,
                 amount = totalAmount,
                 receiver = request.form.get('receiver', ''),
                 phone = request.form.get('phone', ''),

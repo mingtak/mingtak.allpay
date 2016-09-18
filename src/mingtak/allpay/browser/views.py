@@ -6,6 +6,11 @@ import transaction
 import csv
 
 
+class AllpayMacro(BrowserView):
+    """ Allpay Macro
+    """
+
+
 class OrderView(BrowserView):
     """ Order View
     """

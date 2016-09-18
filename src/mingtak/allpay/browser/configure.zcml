@@ -121,8 +121,13 @@
       permission="zope2.View"
       />
 
-
-
+  <browser:page
+      name="allpay_macro"
+      for="*"
+      class=".views.AllpayMacro"
+      template="template/allpay_macro.pt"
+      permission="zope2.View"
+      />
 
   <!-- configlet -->
   <browser:page

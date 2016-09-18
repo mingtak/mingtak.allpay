@@ -1,0 +1,76 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+    xmlns:tal="http://xml.zope.org/namespaces/tal"
+    xmlns:metal="http://xml.zope.org/namespaces/metal"
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    lang="en"
+    metal:use-macro="context/main_template/macros/master"
+    i18n:domain="mingtak.allpay">
+<body>
+
+<metal:row define-macro="cvs">
+  <h4>門市取貨，請選擇取貨店別</h4>
+  <input type="radio" name="LogisticsSubType" class="LogisticsSubType" value="UNIMARTC2C" title="7-11" checked/>
+    <img tal:attributes="src string:${context/absolute_url}/++resource++mingtak.allpay/cvs_7_11.png" alt="7-11" title="7-11" style="width:40px"/>
+  <input type="radio" name="LogisticsSubType" class="LogisticsSubType" value="FAMIC2C" title="全家便利商店"/>
+    <img tal:attributes="src string:${context/absolute_url}/++resource++mingtak.allpay/cvs_fami.png" alt="全家便利商店" title="全家便利商店" style="width:40px" />
+
+  <br/><br/>
+</metal:row>
+
+<metal:row define-macro="home">
+    <h4 i18n:translate="">Address</h4>
+    <p i18n:translate="">You can fill below fields to select shipping to door.</p>
+    <p tal:condition="not:context/@@user_is_anonymous">
+      <select name="shipping_address" class="shipping_address">
+        <option value="address1" label="Address 1" selected i18n:attributes="label" i18n:translate="">Address 1</option>
+        <option value="address2" label="Address 2" i18n:attributes="label" i18n:translate="">Address 2</option>
+         <option value="manually" label="Manually" i18n:attributes="label" i18n:translate="">Manually</option>
+      </select>
+    </p>
+</metal:row>
+
+<metal:row define-macro="address">
+<div id="shipping_method_home_address">
+
+<tal:switch switch="python:view.request.form.get('value')">
+<tal:case case="string:address1">
+        <select class="city selectcity" name="city" required tal:attributes="data-selected view/profile/addr_city | nothing" title="Please select a city" i18n:attributes="title"></select>
+        <select class="district selectdistrict" name="district" required tal:attributes="data-selected view/profile/addr_district | nothing"></select>
+        <input class="zipcode fillzip input-text" name="zipcode" value="" type="text" placeholder="郵遞區號" autocomplete="on">
+        <input class="address filladdress input-text" name="address" value="" type="text" placeholder="請輸入地址" required
+               tal:attributes="value view/profile/addr_address | nothing" autocomplete="on">
+</tal:case>
+
+<tal:case case="string:address2">
+        <select class="city selectcity" name="city" required tal:attributes="data-selected view/profile/addr2_city | nothing" title="Please select a city" i18n:attributes="title"></select>
+        <select class="district selectdistrict" name="district" required tal:attributes="data-selected view/profile/addr2_district | nothing"></select>
+        <input class="zipcode fillzip input-text" name="zipcode" value="" type="text" placeholder="郵遞區號" autocomplete="on">
+        <input class="address filladdress input-text" name="address" value="" type="text" placeholder="請輸入地址" required
+               tal:attributes="value view/profile/addr2_address | nothing" autocomplete="on">
+</tal:case>
+
+<tal:case case="string:manually">
+        <select class="city selectcity" name="city" required title="Please select a city" i18n:attributes="title"></select>
+        <select class="district selectdistrict" name="district" required></select>
+        <input class="zipcode fillzip input-text" name="zipcode" value="" type="text" placeholder="郵遞區號" autocomplete="on">
+        <input class="address filladdress input-text" name="address" value="" type="text" placeholder="請輸入地址" required autocomplete="on">
+</tal:case>
+
+<tal:case case="default">
+        <select class="city selectcity" name="city" required tal:attributes="data-selected view/profile/addr_city | nothing" title="Please select a city" i18n:attributes="title"></select>
+        <select class="district selectdistrict" name="district" required tal:attributes="data-selected view/profile/addr_district | nothing"></select>
+        <input class="zipcode fillzip input-text" name="zipcode" value="" type="text" placeholder="郵遞區號" autocomplete="on">
+        <input class="address filladdress input-text" name="address" value="" type="text" placeholder="請輸入地址" required
+               tal:attributes="value view/profile/addr_address | nothing" autocomplete="on">
+</tal:case>
+</tal:switch>
+
+</div>
+</metal:row>
+
+
+
+
+
+</body>
+</html>

@@ -33,7 +33,7 @@ portal = api.portal.get()
       <!--
       Main Content start
       //-->
-      <form class="envor-f1">
+      <form class="envor-f1" method="post" tal:attributes="action string:${portal/absolute_url}/@@checkout">
       <section class="envor-section envor-section-cart">
         <div class="container">
           <div class="row">
@@ -86,22 +86,72 @@ portal = api.portal.get()
               </table>
             </div>
           </div>
-          <div class="row">
             <!--
             Shipping start
             //-->
-            <div class="col-lg-8 col-md-8">
-              <h3><strong>Shipping</strong> method</h3>
-              <p><label for="shipping-country">Country:*</label>
-                <select name="shipping-country" id="shipping-country">
-                  <option>United Kingdom</option>
-                  <option>France</option>
-                  <option>Italy</option>
-                </select>
-              </p>
-              <p><label for="shipping-state">State/County:*</label><input type="text" id="shipping-state" name="shipping-state"></p>
-              <p><label for="shipping-zip">Postl code/Zip:*</label><input type="text" id="shipping-zip" name="shipping-zip"></p>
-              <p><button class="envor-btn envot-btn-normal envor-btn-secondary">Update Totals</button></p>
+
+
+
+<div class="row">
+  <div class="col-lg-12 col-md-12">
+    <h3><span class="big">1</span><span i18n:translate="">Shipping info</span></h3>
+
+    <!-- 收件人 -->
+    <h4 style="color:#08d" i18n:translate="">Receiver</h4>
+
+    <div class="shipping_info_receiver table">
+      <p>
+        <span i18n:translate="">Receiver</span>:
+        <input class="receiver input-text" name="receiver" type="text" placeholder="Receiver" autocomplete="on"
+               i18n:attributes="placeholder" required
+               tal:attributes="value python:view.profile.title if view.profile else ''">
+      </p>
+      <p>
+        <span i18n:translate="">Phone Number</span>:
+        <input class="phone input-text" name="phone" type="text" placeholder="Phone Number" autocomplete="on"
+               pattern="[0-9, -]{8,12}" required title="Please fill phone number include zip code, ex: 0223456789"
+               tal:attributes="value python:view.profile.phone if view.profile else ''"
+               i18n:attributes="title; placeholder">
+      </p>
+      <p>
+        <span i18n:translate="">Cell Phone Number</span>:
+        <input class="cellphone input-text" name="cellphone" type="text" placeholder="Cell Phone Number" autocomplete="on"
+               tal:attributes="value python:view.profile.cellPhone if view.profile else ''"
+               pattern="[0-9, -]{10,12}" required title="Please fill cell phone number, ex: 0912345678"
+               i18n:attributes="placeholder; title">
+      </p>
+      <p>
+        <span i18n:translate="">Email</span>:
+        <input class="email input-text" name="email" type="email" placeholder="Email" autocomplete="on" required
+               tal:attributes="value python:view.profile.email if view.profile else ''"
+               i18n:attributes="placeholder">
+      </p>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="row">
+            <div class="col-lg-4 col-md-4">
+    <!-- 配送方式 / 地址 -->
+              <h3><span class="big">2</span>請選擇 <strong>配送方式</strong></h3>
+<input v-model="LogisticsType" type="radio" name="LogisticsType" class="LogisticsType" value="home" title="選擇宅配，請填寫收件人資訊" checked>宅配到府
+<input v-model="LogisticsType" type="radio" name="LogisticsType" class="LogisticsType" value="cvs" title="選擇便利商店取貨服務，稍候選擇取貨商店">店到店(7-11/全家)
+<br>
+
+<div class="LogisticsType">
+<div v-show="LogisticsType === 'home'">
+<metal:macro use-macro="context/@@allpay_macro/macros/home" />
+<metal:macro use-macro="context/@@allpay_macro/macros/address" />
+</div>
+<div v-else>
+<metal:macro use-macro="context/@@allpay_macro/macros/cvs" />
+</div>
+</div>
+
+
+
             <!--
             Shipping end
             //-->
@@ -109,8 +159,42 @@ portal = api.portal.get()
             <!--
             Totals start
             //-->
+
+
+
+<div class="col-lg-4 col-md-4">
+    <!-- 發票 -->
+    <h3><span class="big">3</span>請選擇 <strong>發票</strong> 開立方式</h3>
+    <input v-model="radio" type="radio" name="invoice_method" class="invoice_method" value="duplex" title="二聯式發票" checked>二聯式發票
+    <input v-model="radio" type="radio" name="invoice_method" class="invoice_method" value="triplex" title="三聯式發票">三聯式發票
+    <br>
+
+
+<div class="invoice_method">
+<template v-if="radio === 'duplex'">
+    <p>開立二聯式發票，請填寫發票抬頭, 如未填寫，則以收件人姓名為發票抬頭。</p>
+        <span i18n:translate="">Invoice Title</span>:
+        <input class="invoice_title input-text" name="companytitle" value="" type="text" autocomplete="on">
+</template>
+<template v-else>
+    <p>開立三聯式發票，請填寫統一編號及抬頭。</p>
+        <span i18n:translate="">Tax ID</span>:
+        <input class="taxid input-text" name="taxid" value=""
+               type="text" pattern="[0-9]{8}" autocomplete="on" required>
+        <span i18n:translate="">Invoice Title</span>:
+        <input class="invoice_title input-text" name="invoice_title" value=""
+               type="text" autocomplete="on" required>
+</template>
+</div>
+
+
+
+</div>
+
+
+
             <div class="col-lg-4 col-md-4">
-              <h3>訂單 <strong>總計</strong></h3>
+              <h3><span class="big">4</span>訂單 <strong>總計</strong></h3>
               <ul class="order-total">
                 <li>消費金額: <span>$ {{ amount }}</span></li>
                 <li>商品運費: <span>全館免運費</span></li>
@@ -119,13 +203,13 @@ portal = api.portal.get()
               <p class="no-margin">
                 <button type="button" class="envor-btn envot-btn-normal envor-btn-secondary"
                    v-on:click="toOutlet">返回賣場</button>
-                <input type="submit" value="Checkout" class="envor-btn envot-btn-normal envor-btn-primary">
+                <input type="submit" value="Checkout" class="envor-btn envot-btn-normal envor-btn-primary" i18n:attributes="value">
               </p>
             <!--
             Totals end
             //-->
             </div>
-          </div>
+</div>
         </div>
       <!--
       Main Content start
