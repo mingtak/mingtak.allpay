@@ -93,9 +93,9 @@ class IOrder(Interface):
         required=False,
     )
 
-    companyTitle = schema.TextLine(
-        title=_(u"Company Title"),
-        description=_(u"Company Title"),
+    invoiceTitle = schema.TextLine(
+        title=_(u"Invoice Title"),
+        description=_(u"Invoice Title"),
         required=False,
     )
 

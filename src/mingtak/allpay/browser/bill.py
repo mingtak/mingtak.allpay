@@ -28,8 +28,9 @@ class ReturnUrl(BrowserView):
         request = self.request
         response = request.response
         catalog = context.portal_catalog
-        itemInCart = request.cookies.get('itemInCart', '')
-        itemInCart_list = itemInCart.split()
+        alsoProvides(request, IDisableCSRFProtection)
+
+        itemInCart = request.cookies.get('itemInCart', '{}')
 
         with api.env.adopt_user(username="admin"):
             if not request.form['MerchantTradeNo']:
@@ -45,7 +46,6 @@ class ReturnUrl(BrowserView):
             for key in request.form.keys():
                 order.result[key] = request.form[key]
 
-            transaction.commit()
             return
 
 
@@ -60,10 +60,8 @@ class ClientBackUrl(BrowserView):
         response = request.response
         catalog = context.portal_catalog
         portal = api.portal.get()
-#        itemInCart = request.cookies.get('itemInCart', '')
-#        itemInCart_list = itemInCart.split()
 
-        response.setCookie('itemInCart', '')
+#        response.setCookie('itemInCart', '{}')
 #        response.redirect('/logistics_map?MerchantTradeNo=%s' % request.form['MerchantTradeNo'])
 
         self.order = catalog({'Type':'Order', 'id':request.form['MerchantTradeNo']})[0]
@@ -130,8 +128,13 @@ class CheckoutConfirm(BrowserView):
             currentId = api.user.get_current().getId()
             self.profile = portal['members'][currentId]
 
-        self.itemInCart = request.cookies.get('itemInCart', '')
+        self.itemInCart = request.cookies.get('itemInCart', '{}')
         self.itemInCart = json.loads(self.itemInCart)
+
+        if not self.itemInCart:
+            response.redirect(portal.absolute_url())
+            return
+
         self.brain = catalog({'UID':self.itemInCart.keys()})
 
         self.shippingFee = 0
@@ -269,7 +272,7 @@ class Checkout(BrowserView):
                 addr_zip = request.form.get('zipcode', ''),
                 addr_address = request.form.get('address', ''),
                 taxId = request.form.get('taxid', ''),
-                companyTitle = request.form.get('companytitle', ''),
+                invoiceTitle = request.form.get('invoice_title', ''),
                 container=portal['resource']['order'],
             )
 
@@ -301,6 +304,7 @@ class Checkout(BrowserView):
         payment_info['CheckMacValue'] = checkMacValue
         service_url = api.portal.get_registry_record('%s.aioCheckoutURL' % prefixString)
         form_html = self.gen_checkout_form(payment_info, service_url, True)
+        response.setCookie('itemInCart', '{}')
         return form_html
 
 

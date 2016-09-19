@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<object name="portal_catalog" meta_type="Plone Catalog Tool">
+
+  <index name="productUIDs" meta_type="KeywordIndex">
+    <indexed_attr value="productUIDs" />
+  </index>
+  <column value="productUIDs"/>
+
+  <index name="amount" meta_type="FieldIndex">
+    <indexed_attr value="amount" />
+  </index>
+  <column value="amount"/>
+
+  <index name="orderState" meta_type="FieldIndex">
+    <indexed_attr value="orderState" />
+  </index>
+  <column value="orderState"/>
+
+</object>
+

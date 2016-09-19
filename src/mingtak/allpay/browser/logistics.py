@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -* 
+# -*- coding: utf-8 -*
 from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 #from zope.component import getMultiAdapter
@@ -10,6 +10,12 @@ import urllib
 import hashlib
 from Products.CMFPlone.utils import safe_unicode
 import logging
+from zope.event import notify
+from zope.lifecycleevent import ObjectModifiedEvent
+from plone.protect.interfaces import IDisableCSRFProtection
+from zope.interface import alsoProvides
+
+prefixString = 'mingtak.allpay.browser.allpaySetting.IAllpaySetting'
 
 
 class LogisticsMap(BrowserView):
@@ -24,9 +30,9 @@ class LogisticsMap(BrowserView):
         response = request.response
         catalog = context.portal_catalog
 
-        logisticsMapURL = api.portal.get_registry_record('i8d.content.browser.coverSetting.ICoverSetting.logisticsMapURL')
-        merchantId = api.portal.get_registry_record('i8d.content.browser.coverSetting.ICoverSetting.merchantID')
-        serverReplyURL = api.portal.get_registry_record('i8d.content.browser.coverSetting.ICoverSetting.serverReplyURL')
+        logisticsMapURL = api.portal.get_registry_record('%s.logisticsMapURL' % prefixString)
+        merchantId = api.portal.get_registry_record('%s.merchantID' % prefixString)
+        serverReplyURL = api.portal.get_registry_record('%s.serverReplyURL' % prefixString)
 
         self.actionURL = logisticsMapURL
         self.logistics_form = {
@@ -68,12 +74,12 @@ class LogisticsExpressCreate(BrowserView):
         catalog = context.portal_catalog
         portal = api.portal.get()
 
-        hashKey = api.portal.get_registry_record('i8d.content.browser.coverSetting.ICoverSetting.logisticsHashKey')
-        hashIV = api.portal.get_registry_record('i8d.content.browser.coverSetting.ICoverSetting.logisticsHashIV')
+        hashKey = api.portal.get_registry_record('%s.logisticsHashKey' % prefixString)
+        hashIV = api.portal.get_registry_record('%s.logisticsHashIV' % prefixString)
         order = portal['resource']['order'][request.form['merchantTradeNo']]
 
-        logisticsExpressCreateURL = api.portal.get_registry_record('i8d.content.browser.coverSetting.ICoverSetting.logisticsExpressCreateURL')
-        merchantID = api.portal.get_registry_record('i8d.content.browser.coverSetting.ICoverSetting.merchantID')
+        logisticsExpressCreateURL = api.portal.get_registry_record('%s.logisticsExpressCreateURL' % prefixString)
+        merchantID = api.portal.get_registry_record('%s.merchantID' % prefixString)
         merchantTradeNo = request.form['merchantTradeNo']
         merchantTradeDate = DateTime().strftime('%Y/%m/%d %H:%M:%S')
 
@@ -84,7 +90,7 @@ class LogisticsExpressCreate(BrowserView):
         collectionAmount = order.result['TradeAmt'] # 待處理（代收金額）
         isCollection = 'N' # 待處理(是否代收）
         goodsName = order.description[0:12]
-        senderName = 'i8d.tw'
+        senderName = 'opptoday.com'
         senderPhone = '02-28973942'
         senderCellPhone = '0939-586835'
         receiverName = order.receiver
@@ -92,9 +98,9 @@ class LogisticsExpressCreate(BrowserView):
         receiverCellPhone = order.cellPhone
         receiverEmail = order.email
         tradeDesc = order.description[0:100]
-        serverReplyURL = api.portal.get_registry_record('i8d.content.browser.coverSetting.ICoverSetting.serverReplyURL')
-        clientReplyURL = api.portal.get_registry_record('i8d.content.browser.coverSetting.ICoverSetting.clientReplyURL')
-        logisticsC2CReplyURL = api.portal.get_registry_record('i8d.content.browser.coverSetting.ICoverSetting.logisticsC2CReplyURL')
+        serverReplyURL = api.portal.get_registry_record('%s.serverReplyURL' % prefixString)
+        clientReplyURL = api.portal.get_registry_record('%s.clientReplyURL' % prefixString)
+        logisticsC2CReplyURL = api.portal.get_registry_record('%s.logisticsC2CReplyURL' % prefixString)
         receiverStoreID = order.logisticsMapResult['CVSStoreID']
 
 # 全家的resutnstoreid會有錯，先跳過不處理
@@ -103,7 +109,6 @@ class LogisticsExpressCreate(BrowserView):
 #            returnStoreID = '146403' # 7-11 西安店
 #        elif logisticsSubType == 'FAMIC2C':
 #            returnStoreID = '14441' # 全家大同店
-
 
         self.formDict = {
             'MerchantId': merchantID,
@@ -131,17 +136,30 @@ class LogisticsExpressCreate(BrowserView):
         }
 
         self.formDict = self.encoded_dict(self.formDict)
-        sortedForm = sorted(self.formDict.iteritems())
-        sortedForm.insert(0, ('HashKey', hashKey.encode('utf-8')))
-        sortedForm.append(('HashIV', hashIV.encode('utf-8')))
-        # TODO: 不依賴 pyallpay, 需改寫以下這行
-        # urlEncodeString = do_str_replace(urllib.quote(urllib.urlencode(sortedForm), '+%').lower())
+        urlEncodeString = self.getUrlEncodeString(self.formDict)
         checkMacValue = hashlib.md5(urlEncodeString).hexdigest().upper()
 
         self.formDict['CheckMacValue'] = checkMacValue
         self.keys = self.formDict.keys()
-        self.actionURL = api.portal.get_registry_record('i8d.content.browser.coverSetting.ICoverSetting.logisticsExpressCreateURL')
+        self.actionURL = api.portal.get_registry_record('%s.logisticsExpressCreateURL' % prefixString)
         return self.template()
+
+
+    def getUrlEncodeString(self, payment_info):
+        hashKey = api.portal.get_registry_record('%s.checkoutHashKey' % prefixString)
+        hashIv = api.portal.get_registry_record('%s.checkoutHashIV' % prefixString)
+
+        sortedString = ''
+        for k, v in sorted(payment_info.items()):
+            sortedString += '%s=%s&' % (k, str(v))
+
+        sortedString = 'HashKey=%s&%sHashIV=%s' % (str(hashKey), sortedString, str(hashIv))
+        sortedString = urllib.quote_plus(sortedString).lower()
+        return sortedString
+
+#        checkMacValue = hashlib.sha256(sortedString).hexdigest()
+#        checkMacValue = checkMacValue.upper()
+#        return checkMacValue
 
 
 class LogisticsReply(BrowserView):
@@ -155,6 +173,7 @@ class LogisticsReply(BrowserView):
         request = self.request
         response = request.response
         catalog = context.portal_catalog
+        alsoProvides(request, IDisableCSRFProtection)
 
         brain = catalog({'Type': 'Order', 'id': request.form['MerchantTradeNo']})
         if not brain:
@@ -167,7 +186,8 @@ class LogisticsReply(BrowserView):
         for key in request.form.keys():
             order.logisticsMapResult[key] = request.form[key]
 
-        transaction.commit()
+        notify(ObjectModifiedEvent(order))
+#        transaction.commit()
         response.redirect('/logistics_express_create?merchantTradeNo=%s' % request.form['MerchantTradeNo'])
         return
 
@@ -183,6 +203,7 @@ class LogisticsClientReply(BrowserView):
         request = self.request
         response = request.response
         catalog = context.portal_catalog
+        alsoProvides(request, IDisableCSRFProtection)
 
         brain = catalog({'Type': 'Order', 'id': request.form['MerchantTradeNo']})
         if not brain:
@@ -195,7 +216,8 @@ class LogisticsClientReply(BrowserView):
         for key in request.form.keys():
             order.logisticsExpressResult[key] = request.form[key]
 
-        transaction.commit()
+        notify(ObjectModifiedEvent(order))
+#        transaction.commit()
         return self.template()
 
 
@@ -209,7 +231,7 @@ class LogisticsServerReply(BrowserView):
         request = self.request
         response = request.response
         catalog = context.portal_catalog
-
+        alsoProvides(request, IDisableCSRFProtection)
 
         brain = catalog({'Type': 'Order', 'id': request.form['MerchantTradeNo']})
         if not brain:
@@ -222,7 +244,8 @@ class LogisticsServerReply(BrowserView):
         for key in request.form.keys():
             order.logisticsExpressResult[key] = request.form[key]
 
-        transaction.commit()
+        notify(ObjectModifiedEvent(order))
+#        transaction.commit()
 #        response.redirect('/logistics_express_create?merchantTradeNo=%s' % request.form['MerchantTradeNo'])
         return
 

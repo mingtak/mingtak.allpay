@@ -33,4 +33,8 @@
       factory=".setuphandlers.HiddenProfiles"
       name="mingtak.allpay-hiddenprofiles" />
 
+  <adapter name="amount" factory=".catalog.amount_indexer"/>
+  <adapter name="orderState" factory=".catalog.orderState_indexer"/>
+  <adapter name="productUIDs" factory=".catalog.productUIDs_indexer"/>
+
 </configure>

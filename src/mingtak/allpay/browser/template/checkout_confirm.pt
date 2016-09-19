@@ -141,7 +141,7 @@ portal = api.portal.get()
 <br>
 
 <div class="LogisticsType">
-<div v-show="LogisticsType === 'home'">
+<div v-if="LogisticsType === 'home'">
 <metal:macro use-macro="context/@@allpay_macro/macros/home" />
 <metal:macro use-macro="context/@@allpay_macro/macros/address" />
 </div>
@@ -174,7 +174,7 @@ portal = api.portal.get()
 <template v-if="radio === 'duplex'">
     <p>開立二聯式發票，請填寫發票抬頭, 如未填寫，則以收件人姓名為發票抬頭。</p>
         <span i18n:translate="">Invoice Title</span>:
-        <input class="invoice_title input-text" name="companytitle" value="" type="text" autocomplete="on">
+        <input class="invoice_title input-text" name="invoice_title" value="" type="text" autocomplete="on">
 </template>
 <template v-else>
     <p>開立三聯式發票，請填寫統一編號及抬頭。</p>

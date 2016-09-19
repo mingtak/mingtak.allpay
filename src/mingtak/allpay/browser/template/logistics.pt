@@ -1,1 +1,11 @@
-logistics.pt
+<form id="allpay_logistics" name="allPayForm" method="post" target="_self"
+      tal:attributes="action view/actionURL" style="displaye: none;">
+<tal:input repeat="key view/keys">
+<input type='hidden'
+       tal:attributes="name key;
+                       value python:view.logistics_form[key]" />
+</tal:input>
+</form>
+
+
+<script>document.allPayForm.submit();</script>
