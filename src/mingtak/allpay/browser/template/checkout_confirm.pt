@@ -139,7 +139,7 @@ portal = api.portal.get()
 <input v-model="LogisticsType" type="radio" name="LogisticsType" class="LogisticsType" value="home" title="選擇宅配，請填寫收件人資訊" checked>宅配到府
 <input v-model="LogisticsType" type="radio" name="LogisticsType" class="LogisticsType" value="cvs" title="選擇便利商店取貨服務，稍候選擇取貨商店">店到店(7-11/全家)
 <br>
-
+{{ logist }}
 <div class="LogisticsType">
 <div v-if="LogisticsType === 'home'">
 <metal:macro use-macro="context/@@allpay_macro/macros/home" />

@@ -22,7 +22,7 @@
         </div>
         <div class="table-responsive">
 
-              <table class="data-table cart-table" id="shopping-cart-table">
+              <table class="table" id="shopping-cart-table">
                 <thead>
                   <tr class="first last">
                     <th rowspan="1">&nbsp;</th>
@@ -41,16 +41,16 @@
                     <td class="image">
                       <a tal:attributes="title item/Title; href item/getURL" class="product-image" target="_blank">
                         <tal:img switch="item/hasImage1">
-                          <img tal:case="True" tal:attributes="alt item/Title; src string:${item/getURL}/@@images/image_1/thumb" width="75" />
-                          <img tal:case="default" tal:attributes="alt item/Title; src string:/resource/images/nopicture.png/@@images/image/thumb" width="75" />
+                          <img tal:case="True" tal:attributes="alt item/Title; src string:${item/getURL}/@@images/image_1/tile"/>
+                          <img tal:case="default" tal:attributes="alt item/Title; src string:/resource/images/nopicture.png/@@images/image/tile"/>
                         </tal:img>
                       </a>
                     </td>
-                    <td><h2 class="product-name"> <a tal:attributes="href item/getURL" tal:content="item/Title">Sample Product</a> </h2></td>
-                    <td class="a-right"><span class="price">$ <span tal:replace="item/salePrice"/> </span></td>
-                    <td class="a-center movewishlist" tal:content="python:view.order.productUIDs[item.UID]"></td>
-                    <td class="a-right movewishlist"><span class="price">$
-                      <span tal:replace="python:item.salePrice * view.order.productUIDs[item.UID]"/></span>
+                    <td><h4 class="product-name"> <a tal:attributes="href item/getURL" tal:content="item/Title">Sample Product</a> </h4></td>
+                    <td class="a-right"><h4>$ <span tal:replace="item/salePrice"/> </h4></td>
+                    <td> <h4 class="a-center movewishlist" tal:content="python:view.order.productUIDs[item.UID]" /></td>
+                    <td> <h4 class="a-right movewishlist"><span class="price">$
+                      <span tal:replace="python:item.salePrice * view.order.productUIDs[item.UID]"/></span> </h4>
                     </td>
                   </tr>
                 </tbody>
@@ -60,11 +60,9 @@
 <td rowspan="1">&nbsp;</td>
 <td rowspan="1">&nbsp;</td>
 <td rowspan="1">&nbsp;</td>
-<td rowspan="1"><strong i18n:translate="">Total:</strong></td>
+<td rowspan="1"><h4><strong i18n:translate="">Total:</strong></h4></td>
                     <td class="a-right" colspan="7">
-                      $ <span tal:content="view/order/amount" />
-
-
+                      <h4>$ <span tal:content="view/order/amount" /></h4>
                     </td>
                   </tr>
                 </tfoot>
@@ -80,23 +78,23 @@
 <!-- 郵寄 -->
           <ul tal:define="order python:view.order.getObject()"
               tal:condition="python:not order.logisticsMapResult">
-            <li><strong i18n:translate="">Logistics Method</strong>: <span i18n:translate="">Parcel post</span></li>
-            <li><strong i18n:translate="">Receiver</strong>: <span tal:replace="order/receiver" /></li>
-            <li><strong i18n:translate="">Address</strong>: 
-                <span tal:replace="python:'%s %s %s %s' % (order.addr_city, order.addr_district, order.addr_zip, order.addr_address)" />
+            <li><h4><strong i18n:translate="">Logistics Method</strong>: <span i18n:translate="">Parcel post</span></h4></li>
+            <li><h4><strong i18n:translate="">Receiver</strong>: <span tal:replace="order/receiver" /></h4></li>
+            <li><h4><strong i18n:translate="">Address</strong>: 
+                <span tal:replace="python:'%s %s %s %s' % (order.addr_city, order.addr_district, order.addr_zip, order.addr_address)" /></h4>
             </li>
           </ul>
 
 <!-- C2C -->
           <ul tal:define="order python:view.order.getObject()"
               tal:condition="python:order.logisticsMapResult">
-            <li><strong i18n:translate="">Logistics Method</strong>: <span i18n:translate="">C2C</span></li>
-            <li><strong i18n:translate="">Receiver</strong>: <span tal:replace="order/receiver" /></li>
-            <li><strong i18n:translate="">Pickup Location</strong>: 
-                <span tal:replace="python:'%s %s' % ('全家便利商店' if order.logisticsMapResult['LogisticsSubType'] == 'FAMIC2C' else '統一超商(7-11)', order.logisticsMapResult['CVSStoreName'])"/>
+            <li><h4><strong i18n:translate="">Logistics Method</strong>: <span i18n:translate="">C2C</span></h4></li>
+            <li><h4><strong i18n:translate="">Receiver</strong>: <span tal:replace="order/receiver" /></h4></li>
+            <li><h4><strong i18n:translate="">Pickup Location</strong>: 
+                <span tal:replace="python:'%s %s' % ('全家便利商店' if order.logisticsMapResult['LogisticsSubType'] == 'FAMIC2C' else '統一超商(7-11)', order.logisticsMapResult['CVSStoreName'])"/></h4>
             </li>
-            <li><strong i18n:translate="">Address</strong>: 
-                <span tal:replace="python:order.logisticsMapResult['CVSAddress']" />
+            <li><h4><strong i18n:translate="">Address</strong>: 
+                <span tal:replace="python:order.logisticsMapResult['CVSAddress']" /></h4>
             </li>
           </ul>
 
@@ -113,14 +111,6 @@
       </div>
     </div>
   </div>
-
-
-<!-- affiliates start-->
-<script type="text/javascript" src="//vbtrax.com/javascripts/va.js" async></script>
-<script tal:content="view/traceCode">
-</script>
-<!-- affiliates end -->
-
 
 
 </section>

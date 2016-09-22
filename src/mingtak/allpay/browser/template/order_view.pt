@@ -1,1 +1,135 @@
-Order View
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+    xmlns:tal="http://xml.zope.org/namespaces/tal"
+    xmlns:metal="http://xml.zope.org/namespaces/metal"
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    lang="en"
+    metal:use-macro="context/main_template/macros/master"
+    i18n:domain="mingtak.allapy">
+<body>
+
+
+<metal:content-core fill-slot="content-core">
+<metal:content-core define-macro="content-core"
+                    tal:define="toc context/table_of_contents|nothing;">
+
+
+<?python
+from plone import api
+context = econtext['context']
+catalog = context.portal_catalog
+products = catalog({'Type':'Product', 'UID':context.productUIDs.keys()})
+?>
+
+<section class="main-container col1-layout">
+  <div class="main container">
+    <div class="col-main">
+      <div class="cart 1wow bounceInUp 1animated">
+        <div class="page-title">
+          <h2><span i18n:translate="">Merchant Trade No</span>: <span tal:replace="context/id" /></h2>
+        </div>
+        <div class="table-responsive">
+
+              <table class="table" id="shopping-cart-table">
+                <thead>
+                  <tr class="first last">
+                    <th rowspan="1">&nbsp;</th>
+                    <th rowspan="1"><span class="nobr" i18n:translate="">Product Name</span></th>
+                    <th colspan="1" class="a-center"><span class="nobr" i18n:translate="">Unit Price</span></th>
+                    <th class="a-center" rowspan="1" i18n:translate="">Qty</th>
+                    <th colspan="1" class="a-center" i18n:translate="">Subtotal</th>
+                  </tr>
+                </thead>
+
+                <tbody tal:define="items products">
+                  <tr tal:repeat="item items"
+                      tal:attributes="class python:'%s %s %s' % ('first' if repeat['item'].start else '',
+                                                                 'last' if repeat['item'].end else '',
+                                                                 'odd' if repeat['item'].even else 'even')">
+                    <td class="image">
+                      <a tal:attributes="title item/Title; href item/getURL" class="product-image" target="_blank">
+                        <tal:img switch="item/hasImage1">
+                          <img tal:case="True" tal:attributes="alt item/Title; src string:${item/getURL}/@@images/image_1/tile"/>
+                          <img tal:case="default" tal:attributes="alt item/Title; src string:/resource/images/nopicture.png/@@images/image/tile"/>
+                        </tal:img>
+                      </a>
+                    </td>
+                    <td><h4 class="product-name"> <a tal:attributes="href item/getURL" tal:content="item/Title">Sample Product</a> </h4></td>
+                    <td class="a-right"><h4>$ <span tal:replace="item/salePrice"/> </h4></td>
+                    <td> <h4 class="a-center movewishlist" tal:content="python:context.productUIDs[item.UID]" /></td>
+                    <td> <h4 class="a-right movewishlist"><span class="price">$
+                      <span tal:replace="python:item.salePrice * context.productUIDs[item.UID]"/></span> </h4>
+                    </td>
+                  </tr>
+                </tbody>
+
+                <tfoot>
+                  <tr>
+<td rowspan="1">&nbsp;</td>
+<td rowspan="1">&nbsp;</td>
+<td rowspan="1">&nbsp;</td>
+<td rowspan="1"><h4><strong i18n:translate="">Total:</strong></h4></td>
+                    <td class="a-right" colspan="7">
+                      <h4>$ <span tal:content="context/amount" /></h4>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+
+
+
+
+      <div class="cart 1wow bounceInUp 1animated">
+        <div class="page-title">
+          <h2><span i18n:translate="">Logistics info</span></h2>
+
+<!-- 郵寄 -->
+          <ul tal:condition="python:not context.logisticsMapResult">
+            <li><h4><strong i18n:translate="">Logistics Method</strong>: <span i18n:translate="">Parcel post</span></h4></li>
+            <li><h4><strong i18n:translate="">Receiver</strong>: <span tal:replace="context/receiver" /></h4></li>
+            <li><h4><strong i18n:translate="">Address</strong>: 
+                <span tal:replace="python:'%s %s %s %s' % (context.addr_city, context.addr_district, context.addr_zip, context.addr_address)" /></h4>
+            </li>
+          </ul>
+
+<!-- C2C -->
+          <ul tal:condition="python:context.logisticsMapResult">
+            <li><h4><strong i18n:translate="">Logistics Method</strong>: <span i18n:translate="">C2C</span></h4></li>
+            <li><h4><strong i18n:translate="">Receiver</strong>: <span tal:replace="context/receiver" /></h4></li>
+            <li><h4><strong i18n:translate="">Pickup Location</strong>: 
+                <span tal:replace="python:'%s %s' % ('全家便利商店' if context.logisticsMapResult['LogisticsSubType'] == 'FAMIC2C' else '統一超商(7-11)', context.logisticsMapResult['CVSStoreName'])"/></h4>
+            </li>
+            <li><h4><strong i18n:translate="">Address</strong>: 
+                <span tal:replace="python:context.logisticsMapResult['CVSAddress']" /></h4>
+            </li>
+          </ul>
+
+
+        </div>
+        <div class="table-responsive">
+        </div>
+      </div>
+
+
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+</section>
+
+
+
+
+
+
+</metal:content-core>
+</metal:content-core>
+
+</body>
+</html>
+
