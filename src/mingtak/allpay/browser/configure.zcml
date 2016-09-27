@@ -129,6 +129,13 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      name="update_cart_state"
+      for="*"
+      class=".views.UpdateCartState"
+      permission="zope2.View"
+      />
+
   <!-- configlet -->
   <browser:page
     name="allpaySettingControlPanel"

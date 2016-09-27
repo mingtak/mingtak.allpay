@@ -1,0 +1,9 @@
+                  <div class="cart-entry" id="topbarcart">
+                    <p tal:repeat="item view/getCartItems">
+                      <img tal:attributes="src string:${item/getURL}/@@images/image_1/icon" class="pull-right" />
+                      <a tal:attributes="href item/getURL" tal:content="item/Title">product title</a>
+                      x <span tal:replace="python:view.itemInCart[item.UID]"/>
+                      <span class="price">$<span tal:replace="python:view.itemInCart[item.UID]*item.salePrice" /></span>
+                    </p>
+                  </div>
+

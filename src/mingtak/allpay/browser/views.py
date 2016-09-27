@@ -4,6 +4,26 @@ from plone import api
 from DateTime import DateTime
 import transaction
 import csv
+import json
+
+
+class UpdateCartState(BrowserView):
+    """ Update Cart State
+    """
+
+    index = ViewPageTemplateFile("template/update_cart_state.pt")
+
+    def getCartItems(self):
+        context = self.context
+        request = self.request
+
+        self.itemInCart = json.loads(request.cookies.get('itemInCart', '{}'))
+        brain = api.content.find(Type='Product', UID=self.itemInCart.keys())
+        return brain
+
+
+    def __call__(self):
+        return self.index()
 
 
 class AllpayMacro(BrowserView):
