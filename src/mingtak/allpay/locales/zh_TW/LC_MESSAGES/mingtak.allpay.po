@@ -1,6 +1,3 @@
-# --- PLEASE EDIT THE LINES BELOW CORRECTLY ---
-# SOME DESCRIPTIVE TITLE.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
@@ -15,52 +12,52 @@ msgstr ""
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
-"Domain: mingtak.allpay\n"
+"Domain: DOMAIN\n"
 
 #: ./browser/template/allpay_macro.pt:21
 #: ./interfaces.py:85
 msgid "Address"
-msgstr ""
+msgstr "地址"
 
 #: ./browser/template/allpay_macro.pt:28
 msgid "Address 1"
-msgstr ""
+msgstr "地址1"
 
 #: ./browser/template/allpay_macro.pt:29
 msgid "Address 2"
-msgstr ""
+msgstr "地址2"
 
 #: ./browser/allpaySetting.py:34
 msgid "All in one(AIO) Checkout Server URL"
-msgstr ""
+msgstr "全方便付款(AIO) Checkout Server 網址"
 
 #: ./browser/allpaySetting.py:121
 msgid "Allpay Setting"
-msgstr ""
+msgstr "歐付寶設定"
 
 #: ./profiles/default/controlpanel.xml
 msgid "Allpay setup"
-msgstr ""
+msgstr "歐付寶設定"
 
 #: ./interfaces.py:113
 msgid "Amount"
-msgstr ""
+msgstr "總計"
 
 #: ./interfaces.py:54
 msgid "Cell Phone"
-msgstr ""
+msgstr "手機"
 
 #: ./browser/template/checkout_confirm.pt:117
 msgid "Cell Phone Number"
-msgstr ""
+msgstr "手機號碼"
 
 #: ./interfaces.py:55
 msgid "Cell Phone number."
-msgstr ""
+msgstr "手機號碼"
 
 #: ./browser/template/checkout_confirm.pt:206
 msgid "Checkout"
-msgstr ""
+msgstr "結帳"
 
 #: ./browser/allpaySetting.py:28
 msgid "Checkout Hash IV"
@@ -80,11 +77,11 @@ msgstr ""
 
 #: ./interfaces.py:67
 msgid "City"
-msgstr ""
+msgstr "縣市"
 
 #: ./interfaces.py:68
 msgid "City name."
-msgstr ""
+msgstr "縣市名稱"
 
 #: ./browser/allpaySetting.py:46
 msgid "Client Back URL"
@@ -104,15 +101,15 @@ msgstr ""
 
 #: ./browser/template/checkout_confirm.pt:31
 msgid "Confirm Cart / shipping info"
-msgstr ""
+msgstr "確認購物車 / 物流資訊"
 
 #: ./interfaces.py:36
 msgid "Description"
-msgstr ""
+msgstr "描述"
 
 #: ./interfaces.py:73
 msgid "District"
-msgstr ""
+msgstr "鄉鎮市區"
 
 #: ./browser/template/checkout_confirm.pt:124
 #: ./interfaces.py:60
@@ -125,7 +122,7 @@ msgstr ""
 
 #: ./browser/allpaySetting.py:109
 msgid "Initial Bonus Setting"
-msgstr ""
+msgstr "初始紅利設定"
 
 #: ./configure.zcml:21
 msgid "Installs the mingtak.allpay add-on."
@@ -134,7 +131,7 @@ msgstr ""
 #: ./browser/template/checkout_confirm.pt:176
 #: ./interfaces.py:97
 msgid "Invoice Title"
-msgstr ""
+msgstr "發票抬頭"
 
 #: ./browser/allpaySetting.py:101
 msgid "Logistics C2C Reply URL"
@@ -194,7 +191,7 @@ msgstr ""
 
 #: ./browser/template/allpay_macro.pt:30
 msgid "Manually"
-msgstr ""
+msgstr "手動設定"
 
 #: ./interfaces.py:37
 msgid "Mapping to allPay's ItemName"
@@ -214,19 +211,19 @@ msgstr ""
 
 #: ./profiles/default/types/Order.xml
 msgid "Order"
-msgstr ""
+msgstr "訂單"
 
 #: ./interfaces.py:120
 msgid "Order State"
-msgstr ""
+msgstr "訂單狀態"
 
 #: ./interfaces.py:30
 msgid "Order Title"
-msgstr ""
+msgstr "訂單抬頭"
 
 #: ./interfaces.py:121
 msgid "Order state."
-msgstr ""
+msgstr "訂單狀態"
 
 #: ./browser/allpaySetting.py:40
 msgid "Payment Info URL"
@@ -238,31 +235,31 @@ msgstr ""
 
 #: ./interfaces.py:48
 msgid "Phone"
-msgstr ""
+msgstr "電話"
 
 #: ./browser/template/checkout_confirm.pt:110
 msgid "Phone Number"
-msgstr ""
+msgstr "電話號碼"
 
 #: ./interfaces.py:49
 msgid "Phone Number."
-msgstr ""
+msgstr "電話號碼"
 
 #: ./browser/template/checkout_confirm.pt:118
 msgid "Please fill cell phone number, ex: 0912345678"
-msgstr ""
+msgstr "請填寫手機號碼, 例如 0912345678"
 
 #: ./browser/bill.py:198
 msgid "Please fill full address information"
-msgstr ""
+msgstr "請填寫完整收件地址"
 
 #: ./browser/template/checkout_confirm.pt:111
 msgid "Please fill phone number include zip code, ex: 0223456789"
-msgstr ""
+msgstr "請填寫電話號碼(含區碼), 如 0223456789"
 
 #: ./browser/template/allpay_macro.pt:41
 msgid "Please select a city"
-msgstr ""
+msgstr "請選擇縣市"
 
 #: ./interfaces.py:104
 msgid "Product UID(s)"
@@ -275,11 +272,11 @@ msgstr ""
 #: ./browser/template/checkout_confirm.pt:100
 #: ./interfaces.py:42
 msgid "Receiver"
-msgstr ""
+msgstr "收件人"
 
 #: ./interfaces.py:43
 msgid "Receiver name."
-msgstr ""
+msgstr "收件人姓名"
 
 #: ./browser/allpaySetting.py:52
 msgid "Return URL"
@@ -303,12 +300,12 @@ msgstr ""
 
 #: ./browser/template/checkout_confirm.pt:97
 msgid "Shipping info"
-msgstr ""
+msgstr "物流資訊"
 
 #: ./browser/template/checkout_confirm.pt:181
 #: ./interfaces.py:91
 msgid "Tax ID"
-msgstr ""
+msgstr "統一編號"
 
 #: ./interfaces.py:128
 msgid "Trading Results"
@@ -324,15 +321,15 @@ msgstr ""
 
 #: ./browser/template/allpay_macro.pt:22
 msgid "You can fill below fields to select shipping to door."
-msgstr ""
+msgstr "選擇郵寄到府，請您填寫地址欄位"
 
 #: ./interfaces.py:79
 msgid "ZIP Code"
-msgstr ""
+msgstr "區域號碼"
 
 #: ./interfaces.py:80
 msgid "ZIP code"
-msgstr ""
+msgstr 區域號碼""
 
 #: ./browser/allpaySetting.py:35
 msgid "aio server url, mapping to allpay aio server url"
@@ -340,15 +337,15 @@ msgstr ""
 
 #: ./interfaces.py:20
 msgid "arrived"
-msgstr ""
+msgstr "已送達"
 
 #: ./interfaces.py:21
 msgid "inreturn"
-msgstr ""
+msgstr "退貨中"
 
 #: ./browser/template/checkout_confirm.pt:49
 msgid "item"
-msgstr ""
+msgstr "項目"
 
 #: ./configure.zcml:21
 msgid "mingtak.allpay"
@@ -360,7 +357,7 @@ msgstr ""
 
 #: ./interfaces.py:17
 msgid "ordered"
-msgstr ""
+msgstr "已下訂"
 
 #: ./interfaces.py:23
 msgid "overdue"
@@ -368,24 +365,24 @@ msgstr ""
 
 #: ./interfaces.py:18
 msgid "paid"
-msgstr ""
+msgstr "已付款"
 
 #: ./browser/template/checkout_confirm.pt:50
 msgid "price"
-msgstr ""
+msgstr "價格"
 
 #: ./browser/template/checkout_confirm.pt:51
 msgid "qty"
-msgstr ""
+msgstr "數量"
 
 #: ./interfaces.py:22
 msgid "returned"
-msgstr ""
+msgstr "已退貨"
 
 #: ./interfaces.py:19
 msgid "shipped"
-msgstr ""
+msgstr "已出貨"
 
 #: ./browser/template/checkout_confirm.pt:52
 msgid "sub total"
-msgstr ""
+msgstr "小計"
