@@ -90,7 +90,7 @@ class LogisticsExpressCreate(BrowserView):
         collectionAmount = order.result['TradeAmt'] # 待處理（代收金額）
         isCollection = 'N' # 待處理(是否代收）
         goodsName = order.description[0:12]
-        senderName = 'opptoday.com'
+        senderName = 'OppToday'
         senderPhone = '02-28973942'
         senderCellPhone = '0939-586835'
         receiverName = order.receiver
