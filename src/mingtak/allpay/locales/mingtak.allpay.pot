@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-10-03 13:22+0000\n"
+"POT-Creation-Date: 2016-10-05 15:06+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,8 @@ msgstr ""
 "Domain: mingtak.allpay\n"
 
 #: ./browser/template/allpay_macro.pt:21
-#: ./interfaces.py:85
+#: ./browser/template/client_back_url.pt:83
+#: ./browser/template/order_view.pt:89
 msgid "Address"
 msgstr ""
 
@@ -44,6 +45,11 @@ msgstr ""
 
 #: ./interfaces.py:113
 msgid "Amount"
+msgstr ""
+
+#: ./browser/template/client_back_url.pt:91
+#: ./browser/template/order_view.pt:96
+msgid "C2C"
 msgstr ""
 
 #: ./interfaces.py:54
@@ -176,12 +182,22 @@ msgstr ""
 msgid "Logistics Map URL"
 msgstr ""
 
+#: ./browser/template/client_back_url.pt:81
+#: ./browser/template/order_view.pt:87
+msgid "Logistics Method"
+msgstr ""
+
 #: ./interfaces.py:145
 msgid "Logistics express create results, feedback from allPay."
 msgstr ""
 
 #: ./browser/allpaySetting.py:67
 msgid "Logistics express create url."
+msgstr ""
+
+#: ./browser/template/client_back_url.pt:76
+#: ./browser/template/order_view.pt:83
+msgid "Logistics info"
 msgstr ""
 
 #: ./interfaces.py:137
@@ -212,6 +228,11 @@ msgstr ""
 msgid "Merchant ID, for allPay"
 msgstr ""
 
+#: ./browser/template/client_back_url.pt:21
+#: ./browser/template/order_view.pt:28
+msgid "Merchant Trade No"
+msgstr ""
+
 #: ./profiles/default/types/Order.xml
 msgid "Order"
 msgstr ""
@@ -226,6 +247,11 @@ msgstr ""
 
 #: ./interfaces.py:121
 msgid "Order state."
+msgstr ""
+
+#: ./browser/template/client_back_url.pt:81
+#: ./browser/template/order_view.pt:87
+msgid "Parcel post"
 msgstr ""
 
 #: ./browser/allpaySetting.py:40
@@ -248,6 +274,11 @@ msgstr ""
 msgid "Phone Number."
 msgstr ""
 
+#: ./browser/template/client_back_url.pt:93
+#: ./browser/template/order_view.pt:98
+msgid "Pickup Location"
+msgstr ""
+
 #: ./browser/template/checkout_confirm.pt:118
 msgid "Please fill cell phone number, ex: 0912345678"
 msgstr ""
@@ -264,6 +295,11 @@ msgstr ""
 msgid "Please select a city"
 msgstr ""
 
+#: ./browser/template/client_back_url.pt:29
+#: ./browser/template/order_view.pt:36
+msgid "Product Name"
+msgstr ""
+
 #: ./interfaces.py:104
 msgid "Product UID(s)"
 msgstr ""
@@ -272,8 +308,14 @@ msgstr ""
 msgid "Product UID(s) at shopping cart, include qty."
 msgstr ""
 
+#: ./browser/template/client_back_url.pt:31
+#: ./browser/template/order_view.pt:38
+msgid "Qty"
+msgstr ""
+
 #: ./browser/template/checkout_confirm.pt:100
-#: ./interfaces.py:42
+#: ./browser/template/client_back_url.pt:82
+#: ./browser/template/order_view.pt:88
 msgid "Receiver"
 msgstr ""
 
@@ -305,9 +347,19 @@ msgstr ""
 msgid "Shipping info"
 msgstr ""
 
+#: ./browser/template/client_back_url.pt:32
+#: ./browser/template/order_view.pt:39
+msgid "Subtotal"
+msgstr ""
+
 #: ./browser/template/checkout_confirm.pt:181
 #: ./interfaces.py:91
 msgid "Tax ID"
+msgstr ""
+
+#: ./browser/template/client_back_url.pt:63
+#: ./browser/template/order_view.pt:70
+msgid "Total:"
 msgstr ""
 
 #: ./interfaces.py:128
@@ -320,6 +372,11 @@ msgstr ""
 
 #: ./configure.zcml:30
 msgid "Uninstalls the mingtak.allpay add-on."
+msgstr ""
+
+#: ./browser/template/client_back_url.pt:30
+#: ./browser/template/order_view.pt:37
+msgid "Unit Price"
 msgstr ""
 
 #: ./browser/template/allpay_macro.pt:22

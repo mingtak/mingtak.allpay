@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-10-03 13:22+0000\n"
+"POT-Creation-Date: 2016-10-05 15:06+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,7 +15,8 @@ msgstr ""
 "Domain: DOMAIN\n"
 
 #: ./browser/template/allpay_macro.pt:21
-#: ./interfaces.py:85
+#: ./browser/template/client_back_url.pt:83
+#: ./browser/template/order_view.pt:89
 msgid "Address"
 msgstr "地址"
 
@@ -42,6 +43,11 @@ msgstr "歐付寶設定"
 #: ./interfaces.py:113
 msgid "Amount"
 msgstr "總計"
+
+#: ./browser/template/client_back_url.pt:91
+#: ./browser/template/order_view.pt:96
+msgid "C2C"
+msgstr ""
 
 #: ./interfaces.py:54
 msgid "Cell Phone"
@@ -85,19 +91,19 @@ msgstr "縣市名稱"
 
 #: ./browser/allpaySetting.py:46
 msgid "Client Back URL"
-msgstr ""
+msgstr "客戶端返回網址"
 
 #: ./browser/allpaySetting.py:95
 msgid "Client Reply URL"
-msgstr ""
+msgstr "客戶端回覆網址"
 
 #: ./browser/allpaySetting.py:47
 msgid "Client back url."
-msgstr ""
+msgstr "客戶端返回網址"
 
 #: ./browser/allpaySetting.py:96
 msgid "ClientReplyURL, for allPay's logistics"
-msgstr ""
+msgstr "客戶端回覆網址, 物流使用"
 
 #: ./browser/template/checkout_confirm.pt:31
 msgid "Confirm Cart / shipping info"
@@ -143,11 +149,11 @@ msgstr ""
 
 #: ./interfaces.py:144
 msgid "Logistics Express Create Results"
-msgstr ""
+msgstr "物流訂單建立結果"
 
 #: ./browser/allpaySetting.py:66
 msgid "Logistics Express Create URL"
-msgstr ""
+msgstr "物流訂單建立網址"
 
 #: ./browser/allpaySetting.py:77
 msgid "Logistics Hash IV"
@@ -167,11 +173,16 @@ msgstr ""
 
 #: ./interfaces.py:136
 msgid "Logistics Map Results"
-msgstr ""
+msgstr "物流地圖結果"
 
 #: ./browser/allpaySetting.py:60
 msgid "Logistics Map URL"
-msgstr ""
+msgstr "物流地圖網址"
+
+#: ./browser/template/client_back_url.pt:81
+#: ./browser/template/order_view.pt:87
+msgid "Logistics Method"
+msgstr "物流方式"
 
 #: ./interfaces.py:145
 msgid "Logistics express create results, feedback from allPay."
@@ -180,6 +191,11 @@ msgstr ""
 #: ./browser/allpaySetting.py:67
 msgid "Logistics express create url."
 msgstr ""
+
+#: ./browser/template/client_back_url.pt:76
+#: ./browser/template/order_view.pt:83
+msgid "Logistics info"
+msgstr "物流資訊"
 
 #: ./interfaces.py:137
 msgid "Logistics map results, feedback from allPay."
@@ -209,6 +225,11 @@ msgstr ""
 msgid "Merchant ID, for allPay"
 msgstr ""
 
+#: ./browser/template/client_back_url.pt:21
+#: ./browser/template/order_view.pt:28
+msgid "Merchant Trade No"
+msgstr "訂單編號"
+
 #: ./profiles/default/types/Order.xml
 msgid "Order"
 msgstr "訂單"
@@ -225,13 +246,18 @@ msgstr "訂單抬頭"
 msgid "Order state."
 msgstr "訂單狀態"
 
+#: ./browser/template/client_back_url.pt:81
+#: ./browser/template/order_view.pt:87
+msgid "Parcel post"
+msgstr "郵寄"
+
 #: ./browser/allpaySetting.py:40
 msgid "Payment Info URL"
-msgstr ""
+msgstr "付款資訊網址"
 
 #: ./browser/allpaySetting.py:41
 msgid "Payment info url."
-msgstr ""
+msgstr "付款資訊網址"
 
 #: ./interfaces.py:48
 msgid "Phone"
@@ -244,6 +270,11 @@ msgstr "電話號碼"
 #: ./interfaces.py:49
 msgid "Phone Number."
 msgstr "電話號碼"
+
+#: ./browser/template/client_back_url.pt:93
+#: ./browser/template/order_view.pt:98
+msgid "Pickup Location"
+msgstr "收件位置"
 
 #: ./browser/template/checkout_confirm.pt:118
 msgid "Please fill cell phone number, ex: 0912345678"
@@ -261,6 +292,11 @@ msgstr "請填寫電話號碼(含區碼), 如 0223456789"
 msgid "Please select a city"
 msgstr "請選擇縣市"
 
+#: ./browser/template/client_back_url.pt:29
+#: ./browser/template/order_view.pt:36
+msgid "Product Name"
+msgstr "商品名稱"
+
 #: ./interfaces.py:104
 msgid "Product UID(s)"
 msgstr ""
@@ -269,8 +305,14 @@ msgstr ""
 msgid "Product UID(s) at shopping cart, include qty."
 msgstr ""
 
+#: ./browser/template/client_back_url.pt:31
+#: ./browser/template/order_view.pt:38
+msgid "Qty"
+msgstr "數量"
+
 #: ./browser/template/checkout_confirm.pt:100
-#: ./interfaces.py:42
+#: ./browser/template/client_back_url.pt:82
+#: ./browser/template/order_view.pt:88
 msgid "Receiver"
 msgstr "收件人"
 
@@ -280,7 +322,7 @@ msgstr "收件人姓名"
 
 #: ./browser/allpaySetting.py:52
 msgid "Return URL"
-msgstr ""
+msgstr "返回網址"
 
 #: ./browser/allpaySetting.py:53
 msgid "Return url, for checkout."
@@ -302,14 +344,24 @@ msgstr ""
 msgid "Shipping info"
 msgstr "物流資訊"
 
+#: ./browser/template/client_back_url.pt:32
+#: ./browser/template/order_view.pt:39
+msgid "Subtotal"
+msgstr "小計"
+
 #: ./browser/template/checkout_confirm.pt:181
 #: ./interfaces.py:91
 msgid "Tax ID"
 msgstr "統一編號"
 
+#: ./browser/template/client_back_url.pt:63
+#: ./browser/template/order_view.pt:70
+msgid "Total:"
+msgstr "總計"
+
 #: ./interfaces.py:128
 msgid "Trading Results"
-msgstr ""
+msgstr "訂單結果"
 
 #: ./interfaces.py:129
 msgid "Trading Results, feedback from allPay."
@@ -319,17 +371,22 @@ msgstr ""
 msgid "Uninstalls the mingtak.allpay add-on."
 msgstr ""
 
+#: ./browser/template/client_back_url.pt:30
+#: ./browser/template/order_view.pt:37
+msgid "Unit Price"
+msgstr "單價"
+
 #: ./browser/template/allpay_macro.pt:22
 msgid "You can fill below fields to select shipping to door."
 msgstr "選擇郵寄到府，請您填寫地址欄位"
 
 #: ./interfaces.py:79
 msgid "ZIP Code"
-msgstr "區域號碼"
+msgstr "郵遞區號"
 
 #: ./interfaces.py:80
 msgid "ZIP code"
-msgstr ""
+msgstr "郵遞區號"
 
 #: ./browser/allpaySetting.py:35
 msgid "aio server url, mapping to allpay aio server url"
@@ -361,7 +418,7 @@ msgstr "已下訂"
 
 #: ./interfaces.py:23
 msgid "overdue"
-msgstr ""
+msgstr "逾時"
 
 #: ./interfaces.py:18
 msgid "paid"
